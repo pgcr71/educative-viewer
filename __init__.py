@@ -18,7 +18,7 @@ def create_app():
     temp_folder_path = os.path.join(OS_ROOT, "temp")
     delete_dir(temp_folder_path)
 
-    app = Flask(__name__, static_url_path='/edu-viewer/static')
+    app = Flask(__name__, static_url_path='/static')
     app.config['SECRET_KEY'] = '9OLWxND4o83j4K4iuopO'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_FILE_PATH}'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -44,8 +44,10 @@ def create_app():
     @app.before_request
     def create_tables():
         db.create_all()
-
-    db.init_app(app)
+    try:
+        db.init_app(app)
+    except Exception as e:
+        print(e)
 
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
@@ -60,10 +62,10 @@ def create_app():
 
     # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/edu-viewer')
+    app.register_blueprint(auth_blueprint)
 
     # blueprint for non-auth parts of app
     from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint, url_prefix='/edu-viewer')
+    app.register_blueprint(main_blueprint)
 
     return app
