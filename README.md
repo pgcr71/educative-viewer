@@ -33,11 +33,8 @@
 
       env\Scripts\activate
       pip install -r requirements.txt
-      cd ..
-      set course_dir=<path to course folder>
-      set FLASK_APP=educative-viewer
-      set authtoken=<any random keystring>
-      set downloadtoken=<any random keystring>
+      goto .env file
+      change course_dir to the courses folder
       
 
 #### > (For MacOS/Linux)
